@@ -1,0 +1,37 @@
+class Solution:
+    def islandsAndTreasure(self, grid: List[List[int]]) -> None:
+        # use bfs starting from treasure chests
+        # overwrite cell as long as it's less than
+        # calculate neighboring cell as 1 + current node
+
+        rows, cols = len(grid), len(grid[0])
+        # need separate queue for every treasure chest
+
+        queue = deque()
+        visited = set()
+        for r in range(rows):
+            for c in range(cols):
+                if grid[r][c] == 0:
+                    queue.append((r,c))
+                    visited.add((r,c))
+        while queue:
+            r,c = queue.popleft()
+            # while node has neighbors
+            moves = [[1, 0], [-1, 0], [0, 1], [0, -1]]
+
+            for dr, dc in moves:
+                nr, nc = r + dr, c + dc
+
+                # check in bounds
+                if nr < 0 or nr >= rows or nc < 0 or nc >= cols:
+                    continue
+                
+                #check new cell not water, not treasure chest, is smaller distance, unvisited
+                if grid[nr][nc] == -1 or (nr, nc) in visited:
+                    continue
+                # process node
+
+                grid[nr][nc] = grid[r][c] + 1
+                visited.add((nr, nc))
+
+                queue.append((nr, nc))
